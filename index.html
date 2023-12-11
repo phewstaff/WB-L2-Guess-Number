@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Угадай число</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Угадай число</h1>
+    <label for="minRange">Минимальное значение:</label>
+    <input type="number" id="minRange" />
+    <label for="maxRange">Максимальное значение:</label>
+    <input type="number" id="maxRange" />
+    <button onclick="startGame()">Начать игру</button>
+
+    <p>
+      Компьютер загадал число от <span id="minSpan">1</span> до
+      <span id="maxSpan">100</span>.
+    </p>
+    <label for="guess">Ваше предположение:</label>
+    <input type="number" id="guess" min="1" max="100" />
+    <button onclick="checkGuess()">Проверить</button>
+    <p id="message"></p>
+    <p>Попыток: <span id="attempts">0</span></p>
+    <button onclick="resetGame()">Начать заново</button>
+
+    <script>
+      let secretNumber;
+      let attempts = 0;
+      let minRange = 1;
+      let maxRange = 100;
+
+      const startGame = () => {
+        minRange = parseInt(document.getElementById("minRange").value) || 1;
+        maxRange = parseInt(document.getElementById("maxRange").value) || 100;
+
+        document.getElementById("minSpan").innerText = minRange;
+        document.getElementById("maxSpan").innerText = maxRange;
+
+        secretNumber =
+          Math.floor(Math.random() * (maxRange - minRange + 1)) + minRange;
+        attempts = 0;
+        document.getElementById("message").innerText = "";
+        document.getElementById("attempts").innerText = "0";
+      };
+
+      const checkGuess = () => {
+        const userGuess = document.getElementById("guess").valueAsNumber;
+        attempts++;
+
+        if (userGuess === secretNumber) {
+          document.getElementById(
+            "message"
+          ).innerHTML = `<span style="color: green;">Поздравляем! Вы угадали число ${secretNumber} с ${attempts} попытки.</span>`;
+        } else {
+          let hint = "";
+          if (attempts % 3 === 0) {
+            if (secretNumber % 2 === 0) {
+              hint = "Четное";
+            } else {
+              hint = "Нечетное";
+            }
+          }
+
+          let message = "";
+          if (userGuess < minRange || userGuess > maxRange) {
+            message = "Введите число в выбранном диапазоне.";
+          } else if (userGuess < secretNumber) {
+            message = "Загаданное число больше.";
+          } else {
+            message = "Загаданное число меньше.";
+          }
+
+          document.getElementById(
+            "message"
+          ).innerHTML = `<span style="color: red;">${message} ${hint}</span>`;
+        }
+
+        document.getElementById("attempts").innerText = attempts;
+      };
+
+      const resetGame = () => {
+        startGame();
+        document.getElementById("guess").value = "";
+      };
+
+      // Начинаем игру при загрузке страницы
+      window.onload = startGame;
+    </script>
+  </body>
+</html>
