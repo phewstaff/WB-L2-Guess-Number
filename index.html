@@ -57,6 +57,21 @@
 
       const checkGuess = () => {
         const userGuess = document.getElementById("guess").valueAsNumber;
+
+        if (userGuess < minRange || userGuess > maxRange) {
+          document.getElementById(
+            "message"
+          ).innerHTML = `<span style="color: red;">Введите число в выбранном диапазоне.</span>`;
+          return;
+        }
+
+        if (guessedNumbers.includes(userGuess)) {
+          document.getElementById(
+            "message"
+          ).innerHTML = `<span style="color: red;">Вы уже угадывали это число.</span>`;
+          return;
+        }
+
         attempts++;
         guessedNumbers.push(userGuess);
 
@@ -75,9 +90,7 @@
           }
 
           let message = "";
-          if (userGuess < minRange || userGuess > maxRange) {
-            message = "Введите число в выбранном диапазоне.";
-          } else if (userGuess < secretNumber) {
+          if (userGuess < secretNumber) {
             message = "Загаданное число больше.";
           } else {
             message = "Загаданное число меньше.";
