@@ -13,32 +13,54 @@
     </style>
   </head>
   <body>
+    <!-- Заголовок страницы -->
     <h1>Угадай число</h1>
+
+    <!-- Ввод минимального значения -->
     <label for="minRange">Минимальное значение:</label>
     <input type="number" id="minRange" />
+
+    <!-- Ввод максимального значения -->
     <label for="maxRange">Максимальное значение:</label>
     <input type="number" id="maxRange" />
+
+    <!-- Кнопка для начала игры -->
     <button onclick="startGame()">Начать игру</button>
 
+    <!-- Отображение диапазона значений -->
     <p>
       Компьютер загадал число от <span id="minSpan">1</span> до
       <span id="maxSpan">100</span>.
     </p>
+
+    <!-- Ввод пользовательского предположения -->
     <label for="guess">Ваше предположение:</label>
     <input type="number" id="guess" min="1" max="100" />
+
+    <!-- Кнопка для проверки предположения -->
     <button onclick="checkGuess()">Проверить</button>
+
+    <!-- Отображение сообщения о результате -->
     <p id="message"></p>
+
+    <!-- Отображение количества попыток -->
     <p>Попыток: <span id="attempts">0</span></p>
+
+    <!-- Отображение предыдущих попыток -->
     <p>Предыдущие попытки: <span id="previousGuesses"></span></p>
+
+    <!-- Кнопка для начала новой игры -->
     <button onclick="resetGame()">Начать заново</button>
 
     <script>
+      // Переменные для хранения состояния игры
       let secretNumber;
       let attempts = 0;
       let minRange = 1;
       let maxRange = 100;
       let guessedNumbers = [];
 
+      // Функция для начала новой игры
       const startGame = () => {
         minRange = parseInt(document.getElementById("minRange").value) || 1;
         maxRange = parseInt(document.getElementById("maxRange").value) || 100;
@@ -50,14 +72,18 @@
           Math.floor(Math.random() * (maxRange - minRange + 1)) + minRange;
         attempts = 0;
         guessedNumbers = [];
+
+        // Очистка сообщений и отображений
         document.getElementById("message").innerText = "";
         document.getElementById("attempts").innerText = "0";
         document.getElementById("previousGuesses").innerText = "";
       };
 
+      // Функция для проверки предположения пользователя
       const checkGuess = () => {
         const userGuess = document.getElementById("guess").valueAsNumber;
 
+        // Проверка, выходит ли предположение пользователя за пределы диапазона
         if (userGuess < minRange || userGuess > maxRange) {
           document.getElementById(
             "message"
@@ -65,6 +91,7 @@
           return;
         }
 
+        // Проверка, было ли уже угадано данное число
         if (guessedNumbers.includes(userGuess)) {
           document.getElementById(
             "message"
@@ -75,37 +102,37 @@
         attempts++;
         guessedNumbers.push(userGuess);
 
+        // Проверка, угадано ли число
         if (userGuess === secretNumber) {
           document.getElementById(
             "message"
           ).innerHTML = `<span style="color: green;">Поздравляем! Вы угадали число ${secretNumber} с ${attempts} попытки.</span>`;
         } else {
+          // Подсказка после определенного количества попыток
           let hint = "";
           if (attempts % 3 === 0) {
-            if (secretNumber % 2 === 0) {
-              hint = "Четное";
-            } else {
-              hint = "Нечетное";
-            }
+            hint = secretNumber % 2 === 0 ? "Четное" : "Нечетное";
           }
 
-          let message = "";
-          if (userGuess < secretNumber) {
-            message = "Загаданное число больше.";
-          } else {
-            message = "Загаданное число меньше.";
-          }
+          // Сообщение о том, больше или меньше загаданное число
+          let message =
+            userGuess < secretNumber
+              ? "Загаданное число больше."
+              : "Загаданное число меньше.";
 
+          // Отображение сообщения с цветовой разметкой
           document.getElementById(
             "message"
           ).innerHTML = `<span style="color: red;">${message} ${hint}</span>`;
         }
 
+        // Отображение количества попыток и предыдущих попыток
         document.getElementById("attempts").innerText = attempts;
         document.getElementById("previousGuesses").innerText =
           guessedNumbers.join(", ");
       };
 
+      // Функция для начала новой игры
       const resetGame = () => {
         startGame();
         document.getElementById("guess").value = "";
