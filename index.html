@@ -60,13 +60,20 @@
       let maxRange = 100;
       let guessedNumbers = [];
 
+      // Переменные для элементов
+      const minSpanElement = document.getElementById("minSpan");
+      const maxSpanElement = document.getElementById("maxSpan");
+      const messageElement = document.getElementById("message");
+      const attemptsElement = document.getElementById("attempts");
+      const previousGuessesElement = document.getElementById("previousGuesses");
+
       // Функция для начала новой игры
       const startGame = () => {
         minRange = parseInt(document.getElementById("minRange").value) || 1;
         maxRange = parseInt(document.getElementById("maxRange").value) || 100;
 
-        document.getElementById("minSpan").innerText = minRange;
-        document.getElementById("maxSpan").innerText = maxRange;
+        minSpanElement.innerText = minRange;
+        maxSpanElement.innerText = maxRange;
 
         secretNumber =
           Math.floor(Math.random() * (maxRange - minRange + 1)) + minRange;
@@ -74,9 +81,9 @@
         guessedNumbers = [];
 
         // Очистка сообщений и отображений
-        document.getElementById("message").innerText = "";
-        document.getElementById("attempts").innerText = "0";
-        document.getElementById("previousGuesses").innerText = "";
+        messageElement.innerText = "";
+        attemptsElement.innerText = "0";
+        previousGuessesElement.innerText = "";
       };
 
       // Функция для проверки предположения пользователя
@@ -85,17 +92,13 @@
 
         // Проверка, выходит ли предположение пользователя за пределы диапазона
         if (userGuess < minRange || userGuess > maxRange) {
-          document.getElementById(
-            "message"
-          ).innerHTML = `<span style="color: red;">Введите число в выбранном диапазоне.</span>`;
+          messageElement.innerHTML = `<span style="color: red;">Введите число в выбранном диапазоне.</span>`;
           return;
         }
 
         // Проверка, было ли уже угадано данное число
         if (guessedNumbers.includes(userGuess)) {
-          document.getElementById(
-            "message"
-          ).innerHTML = `<span style="color: red;">Вы уже угадывали это число.</span>`;
+          messageElement.innerHTML = `<span style="color: red;">Вы уже угадывали это число.</span>`;
           return;
         }
 
@@ -104,9 +107,7 @@
 
         // Проверка, угадано ли число
         if (userGuess === secretNumber) {
-          document.getElementById(
-            "message"
-          ).innerHTML = `<span style="color: green;">Поздравляем! Вы угадали число ${secretNumber} с ${attempts} попытки.</span>`;
+          messageElement.innerHTML = `<span style="color: green;">Поздравляем! Вы угадали число ${secretNumber} с ${attempts} попытки.</span>`;
         } else {
           // Подсказка после определенного количества попыток
           let hint = "";
@@ -121,15 +122,12 @@
               : "Загаданное число меньше.";
 
           // Отображение сообщения с цветовой разметкой
-          document.getElementById(
-            "message"
-          ).innerHTML = `<span style="color: red;">${message} ${hint}</span>`;
+          messageElement.innerHTML = `<span style="color: red;">${message} ${hint}</span>`;
         }
 
         // Отображение количества попыток и предыдущих попыток
-        document.getElementById("attempts").innerText = attempts;
-        document.getElementById("previousGuesses").innerText =
-          guessedNumbers.join(", ");
+        attemptsElement.innerText = attempts;
+        previousGuessesElement.innerText = guessedNumbers.join(", ");
       };
 
       // Функция для начала новой игры
