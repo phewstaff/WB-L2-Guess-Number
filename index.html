@@ -29,6 +29,7 @@
     <button onclick="checkGuess()">Проверить</button>
     <p id="message"></p>
     <p>Попыток: <span id="attempts">0</span></p>
+    <p>Предыдущие попытки: <span id="previousGuesses"></span></p>
     <button onclick="resetGame()">Начать заново</button>
 
     <script>
@@ -36,6 +37,7 @@
       let attempts = 0;
       let minRange = 1;
       let maxRange = 100;
+      let guessedNumbers = [];
 
       const startGame = () => {
         minRange = parseInt(document.getElementById("minRange").value) || 1;
@@ -47,13 +49,16 @@
         secretNumber =
           Math.floor(Math.random() * (maxRange - minRange + 1)) + minRange;
         attempts = 0;
+        guessedNumbers = [];
         document.getElementById("message").innerText = "";
         document.getElementById("attempts").innerText = "0";
+        document.getElementById("previousGuesses").innerText = "";
       };
 
       const checkGuess = () => {
         const userGuess = document.getElementById("guess").valueAsNumber;
         attempts++;
+        guessedNumbers.push(userGuess);
 
         if (userGuess === secretNumber) {
           document.getElementById(
@@ -84,6 +89,8 @@
         }
 
         document.getElementById("attempts").innerText = attempts;
+        document.getElementById("previousGuesses").innerText =
+          guessedNumbers.join(", ");
       };
 
       const resetGame = () => {
